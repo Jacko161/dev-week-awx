@@ -10,6 +10,7 @@
     message: "Job {{ awx_job_id }} has completed, you can see the output at https://awx.jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
   no_log: yes
   when: user_email is defined and user_email|length != 0
+  ignore_errors: yes
 
 - name: Direct slack
   direct_slack:
@@ -18,3 +19,4 @@
     message: "Job {{ awx_job_id }} has completed, you can see the output at https://awx.jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
   no_log: yes
   when: user_email is not defined or user_email|length == 0
+  ignore_errors: yes
