@@ -6,5 +6,13 @@
 - name: Direct slack
   direct_slack:
     slack_token: "{{ slack_token }}"
+    email: "{{ user_email }}"
+    message: "Hello, World!"
+  when: user_email is defined
+
+- name: Direct slack
+  direct_slack:
+    slack_token: "{{ slack_token }}"
     email: "{{ tower_user_email }}"
     message: "Hello, World!"
+  when: user_email is not defined
