@@ -3,6 +3,8 @@
 - name: Echo Hello!
   shell: echo "Hello, World!"
 
-- name: Lookup a Secret from Vault and Output a Specific Value
-  debug:
-    msg: "{{ lookup('hashi_vault', 'secret=kv/slack:token')}}"
+- name: Direct slack
+  direct_slack:
+    slack_token: {{slack_token}}
+    email: {{user_email}}
+    message: "Hello, World!"
