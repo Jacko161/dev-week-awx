@@ -7,14 +7,14 @@
   direct_slack:
     slack_token: "{{ slack_token }}"
     email: "{{ user_email }}"
-    message: "Hello, World!"
+    message: "Job {{ awx_job_id }} has completed, you can see the output at https://jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
   no_log: yes
   when: user_email is defined and user_email|length != 0
 
 - name: Direct slack
   direct_slack:
     slack_token: "{{ slack_token }}"
-    email: "{{ tower_user_email }}"
-    message: "Hello, World!"
+    email: "{{ awx_user_email }}"
+    message: "Job {{ awx_job_id }} has completed, you can see the output at https://jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
   no_log: yes
   when: user_email is not defined or user_email|length == 0
