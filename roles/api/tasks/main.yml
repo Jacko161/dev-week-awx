@@ -8,6 +8,7 @@
     slack_token: "{{ slack_token }}"
     email: "{{ user_email }}"
     message: "Hello, World!"
+  no_log: yes
   when: user_email is defined and user_email|length != 0
 
 - name: Direct slack
@@ -15,4 +16,5 @@
     slack_token: "{{ slack_token }}"
     email: "{{ tower_user_email }}"
     message: "Hello, World!"
+  no_log: yes
   when: user_email is not defined or user_email|length == 0
