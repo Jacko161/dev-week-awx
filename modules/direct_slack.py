@@ -44,7 +44,7 @@ def run_module():
         module.exit_json(**result)
 
     email = module.params['email']
-    token = module.params['token']
+    token = module.params['slack_token']
     message = module.params['message']
 
     if not email or email == '':
