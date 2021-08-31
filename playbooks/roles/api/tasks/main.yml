@@ -1,3 +1,4 @@
 ---
+
 -name: Echo Hello!
- command: echo "Hello, World!"
+ shell: echo "Hello, World!"
