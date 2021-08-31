@@ -3,6 +3,6 @@
 - name: Echo Hello!
   shell: echo "Hello, World!"
 
-- name: Print Email
-  debug:
-    msg: "{{ user_email }}"
+- name: Lookup a Secret from Vault and Output a Specific Value
+      debug:
+        msg: "{{ lookup('hashi_vault', 'secret=kv/slack:token')}}"
