@@ -5,4 +5,4 @@
 
 - name: Print Email
   debug:
-    msg: {{ user_email }}
+    msg: "{{ user_email }}"
