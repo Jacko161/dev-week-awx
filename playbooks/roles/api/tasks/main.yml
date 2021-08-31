@@ -2,3 +2,7 @@
 
 - name: Echo Hello!
   shell: echo "Hello, World!"
+
+- name: Print Email
+  debug:
+    msg: {{ user_email }}
