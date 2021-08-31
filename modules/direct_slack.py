@@ -63,10 +63,10 @@ def run_module():
 def main():
     run_module()
 
-def post_message_to_slack(text, slack_token, slack_channel):
+def post_message_to_slack(text, slack_token, user_id):
     headers = {"Authorization" : "Bearer " + slack_token}
     return requests.post('https://slack.com/api/chat.postMessage', {
-        'channel': slack_channel,
+        'channel': user_id,
         'text': text
     }, headers=headers).json()
 
