@@ -7,11 +7,11 @@ DOCUMENTATION = r'''
 ---
 module: direct_slack
 
-short_description: This is my direct slack module
+short_description: This module dms someone via slack after looking up their email address
 
 version_added: "1.0.0"
 
-description: This module dms someone via slack after looking up their email address
+description: This module dms someone via slack after looking up their email address.
 
 author:
     - Your Name (@Jacko161)
@@ -48,14 +48,14 @@ def run_module():
     message = module.params['message']
 
     if not email or email == '':
-        module.fail_json(msg='No target email was provided', **result)
+        module.fail_json(msg='No target email was provided.', **result)
 
     result = get_user_slack_id(email, token)
 
     try:
         user_id = result['user']['id']
     except:
-        module.fail_json(msg='Failed to find user id', **result)
+        module.fail_json(msg='Failed to find user id.', **result)
 
     post_message_to_slack(message, token, user_id)
     module.exit_json(**result)
