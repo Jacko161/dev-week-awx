@@ -6,5 +6,5 @@
 - name: Direct slack
   direct_slack:
     slack_token: "{{ slack_token }}"
-    email: "{{ user_email }}"
+    email: "{{ tower_user_email }}"
     message: "Hello, World!"
