@@ -16,6 +16,7 @@
   no_log: yes
   when: user_email is not defined or user_email|length == 0
   ignore_errors: yes
+
 - name: Install and configure API
   block:
   - name: Install Docker
@@ -26,8 +27,9 @@
     become: yes
 
   - name: Check status of alertmanager service
-     service_facts:
-     register: service_state
+    service_facts:
+    register: service_state
+    
   - debug:
        var: service_state.ansible_facts.services["api.service"].state
 
@@ -57,7 +59,7 @@
       name: api
       state: restarted
     become: yes
-    
+
   - name: Direct slack
     direct_slack:
       slack_token: "{{ slack_token }}"
