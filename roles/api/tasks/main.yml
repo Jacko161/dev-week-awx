@@ -25,6 +25,13 @@
       update_cache: yes
     become: yes
 
+ - name: Check status of alertmanager service
+   service_facts:
+   register: service_state
+
+ - debug:
+     var: service_state.ansible_facts.services["api.service"].state
+
   - name: Pull API Image
     command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
     become: yes
