@@ -25,39 +25,39 @@
       update_cache: yes
     become: yes
 
- - name: Check status of alertmanager service
-   service_facts:
-   register: service_state
+   - name: Check status of alertmanager service
+     service_facts:
+     register: service_state
 
- - debug:
-     var: service_state.ansible_facts.services["api.service"].state
+   - debug:
+       var: service_state.ansible_facts.services["api.service"].state
 
-  - name: Pull API Image
-    command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
-    become: yes
+    - name: Pull API Image
+      command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
+      become: yes
 
-  - name: Install API Service File
-    template:
-      src: api.service.j2
-      dest: /etc/systemd/system/api.service
-    become: yes
+    - name: Install API Service File
+      template:
+        src: api.service.j2
+        dest: /etc/systemd/system/api.service
+      become: yes
 
-  - name: Reload Systemd
-    systemd:
-      daemon_reload: yes
-    become: yes
+    - name: Reload Systemd
+      systemd:
+        daemon_reload: yes
+      become: yes
 
-  - name: Enable API Service
-    service:
-      name: api
-      enabled: yes
-    become: yes
+    - name: Enable API Service
+      service:
+        name: api
+        enabled: yes
+      become: yes
 
-  - name: Restart API Service
-    service:
-      name: api
-      state: restarted
-    become: yes
+    - name: Restart API Service
+      service:
+        name: api
+        state: restarted
+      become: yes
 
   - name: Direct slack
     direct_slack:
