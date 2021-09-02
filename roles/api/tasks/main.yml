@@ -29,6 +29,20 @@
   command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
   become: yes
 
+- name: Install API Service File
+  template:
+    src: api.service.j2
+    dest: /etc/systemd/system/api.service
+
+- name: Reload Systemd
+  systemd:
+    daemon_reload: yes
+
+- name: Enable API Service
+  service:
+    name: api
+    enabled: yes
+
 - name: Direct slack
   direct_slack:
     slack_token: "{{ slack_token }}"

@@ -1,0 +1,24 @@
+[Unit]
+Description=Test API
+
+StartLimitIntervalSec=0
+
+Requires=docker.service
+After docker.service
+
+[Service]
+Restart=on-failure
+RestartSec=5
+ExecStartPre=/usr/bin/docker kill -f api
+ExecStartPre=/usr/bin/docker rm -f api
+
+ExecStart=/usr/bin/docker run \
+    --publish 80:8080\
+    --name=api \
+    --volume /etc/instaclustr/:/config/ \
+    devweek.jfrog.io/dev-week/api:{{ version }}
+
+ExecStop=/usr/bin/docker stop api
+
+[Install]
+WantedBy=multi-user.target
