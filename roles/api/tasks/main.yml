@@ -18,8 +18,16 @@
   when: user_email is not defined or user_email|length == 0
   ignore_errors: yes
 
-- name: Echo Hello!
-  shell: echo "Hello, World!"
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: Pull API Image
+  command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
+  become: yes
 
 - name: Direct slack
   direct_slack:
