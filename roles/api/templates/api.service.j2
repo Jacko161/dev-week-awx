@@ -9,8 +9,8 @@ After docker.service
 [Service]
 Restart=on-failure
 RestartSec=5
-ExecStartPre=/usr/bin/docker kill -f api
-ExecStartPre=/usr/bin/docker rm -f api
+ExecStartPre=/usr/bin/docker kill api
+ExecStartPre=/usr/bin/docker rm api
 
 ExecStart=/usr/bin/docker run \
     --publish 80:8080\
