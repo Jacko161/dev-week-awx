@@ -33,15 +33,36 @@
     template:
       src: api.service.j2
       dest: /etc/systemd/system/api.service
+    become: yes
 
   - name: Reload Systemd
     systemd:
       daemon_reload: yes
+    become: yes
 
   - name: Enable API Service
     service:
       name: api
       enabled: yes
+    become: yes
+
+  - name: Direct slack
+    direct_slack:
+      slack_token: "{{ slack_token }}"
+      email: "{{ user_email }}"
+      message: "Job {{ awx_job_id }} has completed, you can see the output at https://awx.jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
+    no_log: yes
+    when: user_email is defined and user_email|length != 0
+    ignore_errors: yes
+
+  - name: Direct slack
+    direct_slack:
+      slack_token: "{{ slack_token }}"
+      email: "{{ awx_user_email }}"
+      message: "Job {{ awx_job_id }} has completed, you can see the output at https://awx.jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
+    no_log: yes
+    when: user_email is not defined or user_email|length == 0
+    ignore_errors: yes
   rescue:
     - name: Direct slack
       direct_slack:
@@ -51,22 +72,3 @@
       no_log: yes
       when: user_email is defined and user_email|length != 0
       ignore_errors: yes
-
-
-- name: Direct slack
-  direct_slack:
-    slack_token: "{{ slack_token }}"
-    email: "{{ user_email }}"
-    message: "Job {{ awx_job_id }} has completed, you can see the output at https://awx.jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
-  no_log: yes
-  when: user_email is defined and user_email|length != 0
-  ignore_errors: yes
-
-- name: Direct slack
-  direct_slack:
-    slack_token: "{{ slack_token }}"
-    email: "{{ awx_user_email }}"
-    message: "Job {{ awx_job_id }} has completed, you can see the output at https://awx.jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
-  no_log: yes
-  when: user_email is not defined or user_email|length == 0
-  ignore_errors: yes
