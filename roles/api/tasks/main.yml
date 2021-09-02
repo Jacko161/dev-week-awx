@@ -46,6 +46,12 @@
       enabled: yes
     become: yes
 
+  - name: Restart API Service
+    service:
+      name: api
+      state: restarted
+    become: yes
+
   - name: Direct slack
     direct_slack:
       slack_token: "{{ slack_token }}"
