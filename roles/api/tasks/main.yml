@@ -31,7 +31,7 @@
     register: service_state
 
   - name: Register Rollback Version
-    command: sudo docker inspect $(sudo docker ps  | awk '{print $2}' | grep -v ID) | jq .[].RepoTags
+    shell: docker inspect $(sudo docker ps  | awk '{print $2}' | grep -v ID) | jq .[].RepoTags
     register: rollback_version
     when: service_state.ansible_facts.services["api.service"].state == 'running'
 
