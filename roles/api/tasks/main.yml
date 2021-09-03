@@ -72,9 +72,9 @@
   rescue:
    - set_fact:
       version: {{ rollback_version.stdout }}
-   - name: Pull API Image
-      command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
-      become: yes
+   - name: Rollback API Image
+     command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
+     become: yes
    - name: Restart API Service
      service:
        name: api
