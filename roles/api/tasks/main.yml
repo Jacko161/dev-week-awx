@@ -17,25 +17,26 @@
   when: user_email is not defined or user_email|length == 0
   ignore_errors: yes
 
+
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: Check status of api service
+  service_facts:
+  register: service_state
+
+- name: Register Rollback Version
+  shell: docker inspect $(sudo docker ps  | awk '{print $2}' | grep -v ID) | jq -r .[].RepoTags
+  register: rollback_version
+  become: yes
+  when: service_state.ansible_facts.services["api.service"].state == 'running'
+
 - name: Install and configure API
   block:
-  - name: Install Docker
-    apt:
-      name: docker.io
-      state: latest
-      update_cache: yes
-    become: yes
-
-  - name: Check status of alertmanager service
-    service_facts:
-    register: service_state
-
-  - name: Register Rollback Version
-    shell: docker inspect $(sudo docker ps  | awk '{print $2}' | grep -v ID) | jq -r .[].RepoTags
-    register: rollback_version
-    become: yes
-    when: service_state.ansible_facts.services["api.service"].state == 'running'
-
   - name: Pull API Image
     command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
     become: yes
@@ -83,11 +84,19 @@
 
 
   rescue:
+    - name: Pull API Image
+      command: docker pull devweek.jfrog.io/dev-week/api:{{ rollback_version }}
+      become: yes
+    - name: Restart API Service
+      service:
+        name: api
+        state: restarted
+      become: yes
     - name: Direct slack
       direct_slack:
         slack_token: "{{ slack_token }}"
         email: "{{ user_email }}"
-        message: "Job {{ awx_job_id }} has failed, you can see the output at https://awx.jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
+        message: "Job {{ awx_job_id }} has failed, version rolled back to {{ rollback_version }} you can see the output at https://awx.jfleming.dev/#/jobs/playbook/{{ awx_job_id }}/output"
       no_log: yes
       when: user_email is defined and user_email|length != 0
       ignore_errors: yes
