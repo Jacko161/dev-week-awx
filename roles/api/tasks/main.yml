@@ -34,7 +34,7 @@
     command: docker inspect $(sudo docker ps  | awk '{print $2}' | grep -v ID) | jq .[].RepoTags
     become: yes
     register: rollback_version
-    when: service_state.ansible_facts.services["api.service"].state == 'RUNNING'
+    when: service_state.ansible_facts.services["api.service"].state == 'running'
 
   - name: Pull API Image
     command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
