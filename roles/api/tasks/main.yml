@@ -38,7 +38,7 @@
 - name: Install and configure API
   block:
     - name: Pull API Image
-      command: docker pull {{ rollback_version.stdout }}
+      command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
       become: yes
 
     - name: Install API Service File
@@ -65,7 +65,7 @@
       become: yes
   rescue:
     - name: Pull API Image
-      command: docker pull devweek.jfrog.io/dev-week/api:{{ rollback_version.stdout }}
+      command: docker pull {{ rollback_version.stdout }}
       become: yes
     - name: Restart API Service
       service:
