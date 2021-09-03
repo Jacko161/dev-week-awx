@@ -38,7 +38,7 @@
 - name: Install and configure API
   block:
   - name: Pull API Image
-    command: docker pull devweek.jfrog.io/dev-week/api:{{ rollback_version }}
+    command: docker pull devweek.jfrog.io/dev-week/api:{{ rollback_version | regex_replace('\"', '') }}
     become: yes
 
   - name: Install API Service File
