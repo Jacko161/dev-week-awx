@@ -63,12 +63,14 @@
         name: api
         state: restarted
       become: yes
-   - set_fact: version="{{ rollback_version.stdout }}"
+   - set_fact:
+      version: {{ rollback_version.stdout }}
    - debug: var=version
 
   rescue:
-    - set_fact: version="{{ rollback_version.stdout }}"
-    - name: Pull API Image
+   - set_fact:
+      version: {{ rollback_version.stdout }}
+   - name: Pull API Image
       command: docker pull devweek.jfrog.io/dev-week/api:{{ version }}
       become: yes
     - name: Restart API Service
