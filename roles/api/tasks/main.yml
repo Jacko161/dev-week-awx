@@ -30,7 +30,7 @@
   register: service_state
 
 - name: Register Rollback Version
-  shell: docker inspect $(sudo docker ps  | awk '{print $2}' | grep -v ID) | jq -r -j .[].RepoTags | jq -r '.[0]'
+  shell: docker inspect $(sudo docker ps  | awk '{print $2}' | grep -v ID) | jq -r -j .[].RepoTags | jq -r '.[0]' | grep -Po "(?<=api:).*$"
   register: rollback_version
   become: yes
   when: service_state.ansible_facts.services["api.service"].state == 'running'
@@ -64,6 +64,9 @@
         state: restarted
       become: yes
   rescue:
+    - name: Set rollback as primary version
+      shell: echo {{ rollback_version.stdout }}
+
     - name: Pull API Image
       command: docker pull {{ rollback_version.stdout }}
       become: yes
