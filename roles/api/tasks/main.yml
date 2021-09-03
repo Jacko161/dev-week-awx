@@ -63,8 +63,10 @@
         name: api
         state: restarted
       become: yes
-   - set_fact:
-      version: {{ rollback_version.stdout }}
+      
+   - name: Set Version
+     set_fact:
+       version: {{ rollback_version.stdout }}
    - debug: var=version
 
   rescue:
