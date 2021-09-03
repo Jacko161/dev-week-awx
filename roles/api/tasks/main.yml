@@ -65,7 +65,7 @@
       become: yes
 
     - name: Set Version
-      set_fact: version="{{ rollback_version.stdout }}"
+      set_fact: version="{{ version }}"
     - debug: var=version
 
   rescue:
