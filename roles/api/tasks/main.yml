@@ -33,6 +33,7 @@
   - name: Register Rollback Version
     shell: docker inspect $(sudo docker ps  | awk '{print $2}' | grep -v ID) | jq .[].RepoTags
     register: rollback_version
+    become: yes
     when: service_state.ansible_facts.services["api.service"].state == 'running'
 
   - name: Pull API Image
